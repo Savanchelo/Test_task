@@ -1,0 +1,8 @@
+{
+  "url": "https://todomvc.com/examples/angular2/",
+  "firstRow": 1,
+  "twoRowsCounter": 2,
+  "fourRowsCounter": 4,
+  "counterTextWithOneRow": "item",
+  "counterTextWithSomeRows": "items"
+}
