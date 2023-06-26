@@ -5,36 +5,42 @@ import aquality.selenium.elements.interfaces.ITextBox;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import utils.PropertiesParser;
+
+import java.util.Objects;
 
 public class LandingPage extends Form {
+    private final int firstCountElement = Objects.requireNonNull(PropertiesParser.getTestData()).getFirstCountElement();
+    private final int lastCountElement = PropertiesParser.getTestData().getLastCountElement();
+
+    public LandingPage() {
+        super(By.xpath("//section[@class='todoapp']"), "Header");
+    }
 
     private final ITextBox notesCount = getElementFactory().getTextBox
             (By.xpath("//span[@class='todo-count']"), "Count of notes");
     private final ITextBox fieldInput = getElementFactory().getTextBox
             (By.xpath("//input[@placeholder='What needs to be done?']"), "Input field");
 
-    private ITextBox createdNote(String count) {
-        return getElementFactory().getTextBox(By.xpath(String.format("(//div[@class='view'])[%s]", count)), "Note input field");
+    private ITextBox createdNote(int count) {
+        return getElementFactory().getTextBox(By.xpath(String.format("(//div[@class='view'])[%d]", count)), "Note input field");
     }
 
-    private IButton destroyButton(String count) {
+    private IButton destroyButton(int count) {
         return getElementFactory().getButton
-                (By.xpath(String.format("(//button[@class='destroy'])[%s]", count)), "Destroy button");
-    }
-    private ITextBox editedNote(String count) {
-       return getElementFactory().getTextBox
-                (By.xpath(String.format("(//input[@class='edit'])[%s]", count)), "Edited not input");
+                (By.xpath(String.format("(//button[@class='destroy'])[%d]", count)), "Destroy button");
     }
 
-    public LandingPage() {
-        super(By.xpath("//section[@class='todoapp']"), "Header");
+    private ITextBox editedNote(int count) {
+        return getElementFactory().getTextBox
+                (By.xpath(String.format("(//input[@class='edit'])[%d]", count)), "Edited not input");
     }
 
     public String getCountOfNotes() {
-        return notesCount.getText().substring(0, 1);
+        return notesCount.getText().substring(firstCountElement, lastCountElement);
     }
 
-    public String getCounterText(){
+    public String getCounterText() {
         return notesCount.getText();
     }
 
@@ -46,44 +52,45 @@ public class LandingPage extends Form {
         fieldInput.sendKeys(Keys.ENTER);
     }
 
-    public boolean createdNoteIsDisplayed(String count) {
+    public boolean createdNoteIsDisplayed(int count) {
         return createdNote(count).state().isDisplayed();
     }
 
-    public String getCreatedNoteText(String count) {
+    public String getCreatedNoteText(int count) {
         return createdNote(count).getText();
     }
 
-    public void editCreatedNote(String count) {
+    public void editCreatedNote(int count) {
         createdNote(count).getMouseActions().doubleClick();
     }
 
-    public void clearEditNoteInputField(String count) {
-        editedNote(count).sendKeys(Keys.chord(Keys.CONTROL + "a"));
+    public void clearEditNoteInputField(int count) {
+        String aLetter = "a";
+        editedNote(count).sendKeys(Keys.chord(Keys.CONTROL + aLetter));
         editedNote(count).sendKeys(Keys.DELETE);
     }
 
-    public void acceptEditedField(String count) {
+    public void acceptEditedField(int count) {
         editedNote(count).sendKeys(Keys.ENTER);
     }
 
-    public void focusOnNextElement(String count) {
+    public void focusOnNextElement(int count) {
         editedNote(count).sendKeys(Keys.TAB);
     }
 
-    public void sendTextToEditNote(String count, String text) {
+    public void sendTextToEditNote(int count, String text) {
         editedNote(count).sendKeys(text);
     }
 
-    public boolean destroyButtonIsDisplayed(String count) {
+    public boolean destroyButtonIsDisplayed(int count) {
         return destroyButton(count).state().isDisplayed();
     }
 
-    public void hoverTheCreatedNote(String count) {
+    public void hoverTheCreatedNote(int count) {
         createdNote(count).getMouseActions().moveMouseToElement();
     }
 
-    public void clickOnDestroyButton(String count) {
+    public void clickOnDestroyButton(int count) {
         destroyButton(count).click();
     }
 }

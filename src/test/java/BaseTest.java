@@ -5,13 +5,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import utils.PropertiesParser;
 
-public abstract class BaseTest {
+import java.util.Objects;
 
+public abstract class BaseTest {
     protected Logger logger = AqualityServices.getLogger();
+    private final String URL = Objects.requireNonNull(PropertiesParser.getTestData()).getUrl();
 
     @BeforeMethod
     protected void setUp() {
-        getBrowser().goTo(PropertiesParser.getTestData().getUrl());
+        getBrowser().goTo(URL);
         getBrowser().waitForPageToLoad();
     }
 
